@@ -95,10 +95,31 @@ Rules used in this repo:
 
 ### 🛠️ Building locally
 
-- Run `./gradlew buildAndroid`
-- The built patches .mpp file is found in `patches/build/libs/patches-*.mpp`
+Requirements:
+
+- **JDK 21.** The `app.morphe.patches` plugin will not run on JDK 17.
+- **A GitHub token with `read:packages`.** The Morphe patcher artifacts live on GitHub Packages, which requires this scope *even for public packages*. Without it Gradle reports the plugin as "not found" (it is really a 401).
+
+```sh
+# gh CLI: add the scope once
+gh auth refresh -h github.com -s read:packages
+
+# Build. Note: a pre-set GITHUB_TOKEN environment variable shadows `gh auth token`,
+# and an older token without read:packages produces a confusing 401 — hence `env -u`.
+export JAVA_HOME=/path/to/jdk-21
+T=$(env -u GITHUB_TOKEN -u GITHUB_ACTOR gh auth token)
+GITHUB_ACTOR=<github-user> GITHUB_TOKEN="$T" ./gradlew --no-daemon buildAndroid
+```
+
+Output:
+
+- The built patches `.mpp` file is found in `patches/build/libs/patches-*.mpp`
 - Patch the mpp file using [Morphe-Desktop](https://github.com/MorpheApp/morphe-desktop)
   like any other patch bundle.
+
+**No `extensions/` module.** The template's `extensions/extension` project was removed: any `.mpe` runtime extension is an Android library and therefore needs a full Android SDK (`ANDROID_HOME`), which a plain headless JDK build does not have. No patch here uses one. If a future patch needs an `.mpe`, copy `extensions/extension` back from
+[MorpheApp/morphe-patches-template](https://github.com/MorpheApp/morphe-patches-template)
+and install the Android command-line tools + platform + build-tools first.
 
 See the [Morphe documentation](https://github.com/MorpheApp/morphe-documentation) for more information.
 
