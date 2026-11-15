@@ -15,7 +15,13 @@ These are private, personal-use patches. No patched APKs are distributed from th
 
 ### How to use these patches
 
-Add this repository as a patch source in Morphe Manager: https://github.com/Dyno0311/dyno-patches
+**This repository is currently private**, and Morphe Manager cannot fetch a private repo as a patch source. Until it is published, build the bundle locally and apply the `.mpp` by hand:
+
+```sh
+./gradlew buildAndroid   # -> patches/build/libs/patches-*.mpp
+```
+
+Once the repo is made public (only on the owner's explicit decision), it can be added as a patch source: https://github.com/Dyno0311/dyno-patches
 
 <a href="https://morphe.software/add-source?github=Dyno0311/dyno-patches">
   <img src=".github/assets/add-to-morphe.svg" alt="Add to Morphe" height="48">
