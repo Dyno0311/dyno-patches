@@ -1,18 +1,23 @@
-# 👋🧩 Morphe Patches template
+# 🧩 Dyno Patches
 
-Template repository for Morphe Patches.
+Personal Android patches for apps I own, built with the Morphe patcher.
 
 ## ❓ About
 
-Patches for apps I like.
+Two kinds of patches live here:
 
-<!-- TODO: Update this about section with a brief introduction/summary about this repo and what it offers. -->
+- **Universal** — `patches/src/main/kotlin/dev/dyno0311/patches/universal/`: apply across many apps (ad SDK blocking, telemetry removal, and similar).
+- **App-targeted** — `patches/src/main/kotlin/dev/dyno0311/patches/apps/<appname>/`: written for one package and pinned to the exact version that was tested.
+
+Shared compatibility declarations and cross-patch constants belong in `patches/src/main/kotlin/dev/dyno0311/patches/shared/`.
+
+These are private, personal-use patches. No patched APKs are distributed from this repository.
 
 ### How to use these patches
 
-Click the button below, or manually add this repo url to Morphe Manager: https://github.com/xyz-user/xyz-patches
+Add this repository as a patch source in Morphe Manager: https://github.com/Dyno0311/dyno-patches
 
-<a href="https://morphe.software/add-source?github=xyz-user/xyz-patches">
+<a href="https://morphe.software/add-source?github=Dyno0311/dyno-patches">
   <img src=".github/assets/add-to-morphe.svg" alt="Add to Morphe" height="48">
 </a>
 
@@ -31,47 +36,40 @@ Click the button below, or manually add this repo url to Morphe Manager: https:/
 
 &nbsp;
 
-## 🚀 Getting development started
+## 🚀 Adding a patch
 
-To start using this template, follow these steps:
+Layout under `patches/src/main/kotlin/dev/dyno0311/patches/`:
 
-1. [Setup](https://github.com/MorpheApp/morphe-documentation/blob/main/docs/morphe-development/README.md) your development environment including adding a GitHub PAT as described [here](https://github.com/MorpheApp/morphe-patcher/blob/main/docs/2_1_setup.md#-prepare-the-environment).
-2. [Create a new repository using this template](https://github.com/new?template_name=morphe-patches-template&template_owner=MorpheApp). Select create a new repository, and **enable 'Include all branches'** 
-3. Enable "Allow GitHub Actions to create and approve pull requests" in your repo Settings > Actions > General > Workflow permissions
-4. Update the [build.gradle.kts](patches/build.gradle.kts) file (Specifically, the 
-   [group of the project](patches/build.gradle.kts#L1), and the [About](patches/build.gradle.kts#L6-L11))
-5. Update the [README.md](README.md) file to be specific of your repo, and update the links in the [issue templates](.github/ISSUE_TEMPLATE).
-6. Choose a name for your patches project. Keep in mind you must use a name that does not 
-   imply authorship by the Morphe open source project. If unsure, then simply name these
-   patches after yourself ("UserXYZ Morphe patches"). See the [NOTICE](NOTICE) for details. 
-7. (Optional): Add `patches-bundle.png` to the project if you want a custom icon to show in
-   Morphe Manager instead of your GitHub profile avatar.
-8. (Optional): Sign your releases, so Morphe Manager refuses a release that was changed or swapped after you published it:
-   1. Run `./gradlew generateSigningKey`. It creates `morphe-signing.pub` and `morphe-signing.key`.
-   2. Commit `morphe-signing.pub`. Never commit `morphe-signing.key`, it is already ignored by git.
-   3. Add the content of `morphe-signing.key` as the `MORPHE_SIGNING_KEY` secret in your repo
-      Settings > Secrets and variables > Actions, then keep a backup of it somewhere safe and delete the file.
+```text
+universal/            cross-app patches (ad SDKs, telemetry, selection, orientation)
+apps/<appname>/       one app, pinned to the tested version
+shared/               shared Compatibility declarations and constants
+```
 
-   Every release is signed from then on. If you lose the key or it leaks, create a new one the same way;
-   users then have to confirm the new key in Morphe Manager before they get your next release.
+Rules used in this repo:
 
-🎉 You are now ready to start creating patches!
+- One patch per file, named for what it does. Keep the change minimal.
+- Universals must fail soft: skip when a fingerprint does not match, log what matched, and never edit a method the fingerprint cannot prove.
+- App-targeted patches pin the exact `version` (and `versionCodes` when architecture builds share a version name) that was tested.
+- Prefer `returnEarly`/`returnLate`, `resourceXml`, or one narrow instruction edit over injected smali blocks.
+- Build a stable fingerprint from non-obfuscated types, method shape, durable strings, literals, and calls. Port behaviour from community patches, not their API shape.
 
-## 🧑‍💻 Dev usage
-
-To develop and release your Patches using this template:
+### Development workflow
 
 - **Make all changes to the `dev` branch.**
-- For local development work build your patches using the gradle task `./gradlew buildAndroid` to generate the mpp file found in `patches/build/libs/patches-*.mpp`. Apply your patches locally using Morphe Desktop tool like any other patch bundle.
-- Always use [Semantic commit](https://kapeli.com/cheat_sheets/Semantic_Commits.docset/Contents/Resources/Documents/index) messages for commits. To keep it simple use only 3 commit message types: 
+- Local build: `./gradlew buildAndroid` produces `patches/build/libs/patches-*.mpp`; apply it with Morphe Desktop like any other bundle.
+- Use semantic commit messages only:
   - `feat: Added a new feature`
   - `fix: Some problem now fixed`
   - `chore: Random change you do not want in the user facing changelog`
-- Commits of `fix:` and `feat:` will automatically generate new pre-releases and `chore:` will not create a new release.
-- Users can apply your dev branch releases by enabling `pre-release` in Morphe Manager patch sources.
-- When your dev branch is ready, and you want a stable release, merge dev branch to main (do not squash, and only merge).
-- **Always use semantic release (release.yml)**. Do not manually upload or create releases by hand
-  because many files must be updated and release.yml handles everything.
+- `fix:` and `feat:` produce pre-releases from `dev`; `chore:` does not.
+- When `dev` is ready, merge it into `main` (merge, do not squash) for a stable release.
+- **Always use semantic release (release.yml).** Do not hand-create releases; do not hand-edit `patches-list.json`, `patches-bundle.json`, or `CHANGELOG.md`.
+- Enable "Allow GitHub Actions to create and approve pull requests" in Settings > Actions > General > Workflow permissions.
+- Optional signing so Morphe Manager rejects swapped releases:
+  1. `./gradlew generateSigningKey` creates `morphe-signing.pub` and `morphe-signing.key`.
+  2. Commit `morphe-signing.pub`. Never commit `morphe-signing.key`; it is git-ignored.
+  3. Add the contents of `morphe-signing.key` as the `MORPHE_SIGNING_KEY` repo secret, back it up, then delete the file.
 
 ## 🤓 Tips
 - See the [patcher documentation](https://github.com/MorpheApp/morphe-patcher/blob/main/docs/1_patcher_intro.md) for more examples of creating patches and fingerprints.
@@ -100,4 +98,4 @@ See the [Morphe documentation](https://github.com/MorpheApp/morphe-documentation
 
 ## 📜 License
 
-UserXYZ Patches are licensed under the [GNU General Public License v3.0](LICENSE)
+Dyno Patches are licensed under the [GNU General Public License v3.0](LICENSE)

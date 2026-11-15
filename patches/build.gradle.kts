@@ -1,14 +1,15 @@
-group = "app.template"
+group = "dev.dyno0311"
 
 patches {
-    // TODO: Update this section with your project details.
+    // This name is what shows up as the patch source in Morphe Manager.
+    // Keep it clearly distinct from "Morphe" itself and from other bundles.
     about {
-        name = "UserXYZ Patches"
-        description = "Patches for apps I like"
-        source = "git@github.com:UserXYZ/morphe-patches.git"
-        author = "Awesome dev"
-        contact = "na"
-        website = "na"
+        name = "Dyno Patches"
+        description = "Personal Android patches, compatible with Morphe."
+        source = "https://github.com/Dyno0311/dyno-patches.git"
+        author = "Dyno0311"
+        contact = "https://github.com/Dyno0311/dyno-patches/issues"
+        website = "https://github.com/Dyno0311/dyno-patches"
         license = "GPLv3"
     }
 }

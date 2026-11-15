@@ -1,4 +1,4 @@
-package app.template.extension.extension;
+package dev.dyno0311.extension.extension;
 
 @SuppressWarnings("unused")
 public class ExamplePatch {
