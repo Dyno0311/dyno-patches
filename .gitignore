@@ -132,3 +132,6 @@ node_modules/
 # Ignore IDEA files
 .idea/
 local.properties
+patches/morphe-temporary-files/
+build/
+.gradle/

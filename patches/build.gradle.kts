@@ -17,13 +17,34 @@ patches {
 // Separate configuration so gson is available at runtime for the
 // generatePatchesList task but never bundled into the APK.
 val patchListGeneratorClasspath = configurations.create("patchListGeneratorClasspath")
+// Runtime classpath for the local validation harness; keeps the patcher out of the bundle.
+val patchValidatorClasspath = configurations.create("patchValidatorClasspath")
 
 dependencies {
     compileOnly(libs.gson)
+    compileOnly("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.10.2")
     patchListGeneratorClasspath(libs.gson)
+    patchValidatorClasspath(libs.morphe.patcher)
 }
 
 tasks {
+    register<JavaExec>("verifyBundle") {
+        description = "Load a built bundle through the patch loader and assert its patches are visible"
+        classpath = sourceSets["main"].output + patchValidatorClasspath
+        mainClass.set("util.VerifyBundleKt")
+        args = (project.findProperty("bundleArgs") as String?)?.split(" ") ?: emptyList()
+    }
+
+    register<JavaExec>("validateCamScanner") {
+        description = "Apply the bundle's patches to an APK with validation enabled"
+        dependsOn(build)
+        classpath = sourceSets["main"].output + patchValidatorClasspath
+        mainClass.set("util.ValidatePatchesKt")
+        maxHeapSize = "2g"
+        systemProperty("patches", project.findProperty("patches") ?: "")
+        args = (project.findProperty("apkArgs") as String?)?.split(" ") ?: emptyList()
+    }
+
     register<JavaExec>("generatePatchesList") {
         description = "Build patch with patch list"
 
