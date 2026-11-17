@@ -1,7 +1,8 @@
 {
-  "created_at": "2026-11-17T17:58:40",
-  "description": "## [1.4.0](https://github.com/Dyno0311/dyno-patches/compare/v1.3.1...v1.4.0) (2026-11-17)\n\n### ✨ New Features\n\n* **camscanner:** premium, ads, PDF watermark and piracy patches for 7.27.0 ([dc8c791](https://github.com/Dyno0311/dyno-patches/commit/dc8c791cb9238775f1f87102fc21d484dc26995c))",
-  "download_url": "https://github.com/Dyno0311/dyno-patches/releases/download/v1.4.0/patches-1.4.0.mpp",
+  "created_at": "2026-11-17T18:05:54",
+  "description": "## [1.5.0](https://github.com/Dyno0311/dyno-patches/compare/v1.4.0...v1.5.0) (2026-11-17)\n\n### ✨ New Features\n\n* publish bundle signing public key ([7110356](https://github.com/Dyno0311/dyno-patches/commit/711035683aa39cc93140d094459645ba02413d03))",
+  "download_url": "https://github.com/Dyno0311/dyno-patches/releases/download/v1.5.0/patches-1.5.0.mpp",
   "signature_download_url": "",
-  "version": "1.4.0"
+  "version": "1.5.0",
+  "public_key": "1qrYFSEz0r0SG/JOxqZFM+wmPkr3oTlMxJkXDSq7dyA="
 }
