@@ -135,3 +135,4 @@ local.properties
 patches/morphe-temporary-files/
 build/
 .gradle/
+morphe-signing.key
