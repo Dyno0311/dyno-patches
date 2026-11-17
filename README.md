@@ -30,9 +30,9 @@ Once the repo is made public (only on the owner's explicit decision), it can be 
 ## 🩹 Patches list
 
 <!-- PATCHES_START EXPANDED -->
-> **[v1.5.0](https://github.com/Dyno0311/dyno-patches/releases/tag/v1.5.0)**&nbsp;&nbsp;•&nbsp;&nbsp;`main`&nbsp;&nbsp;•&nbsp;&nbsp;4 patches total
+> **[v1.6.0](https://github.com/Dyno0311/dyno-patches/releases/tag/v1.6.0)**&nbsp;&nbsp;•&nbsp;&nbsp;`main`&nbsp;&nbsp;•&nbsp;&nbsp;5 patches total
 <details open>
-<summary>📦 CamScanner&nbsp;&nbsp;•&nbsp;&nbsp;4 patches</summary>
+<summary>📦 CamScanner&nbsp;&nbsp;•&nbsp;&nbsp;5 patches</summary>
 <br>
 
 **Package name:** `com.intsig.camscanner`
@@ -47,6 +47,7 @@ Once the repo is made public (only on the owner's explicit decision), it can be 
 | [Hide piracy warning](#hide-piracy-warning) | Removes the "This CamScanner copy is not genuine" dialog and toast. The app's internal genuine/pirate state is left alone, so nothing re-routes features. |  |
 | [Remove PDF watermark](#remove-pdf-watermark) | Stops the Scanned with CamScanner watermark from being drawn into exported and shared PDFs. The local document is otherwise produced by the same native PDF engine, unmodified. |  |
 | [Remove ads](#remove-ads) | Blocks every CamScanner ad position at the interceptor choke point (app launch, main/share/page banners, doc list, scan-done and rewarded inventory). Ad SDKs stay bundled but receive no requests. |  |
+| [Spoof app signature](#spoof-app-signature) | Reports the original signing certificate to the app so tamper and licence checks pass. |  |
 | [Unlock premium](#unlock-premium) | Reports a local VIP / super-VIP account status and sync entitlement, unlocking the features CamScanner gates behind its subscription check on device. Cloud credits, Word/Excel conversion and other server-side work stay validated remotely. |  |
 
 </details>
