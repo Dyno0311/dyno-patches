@@ -30,67 +30,27 @@ Once the repo is made public (only on the owner's explicit decision), it can be 
 ## 🩹 Patches list
 
 <!-- PATCHES_START EXPANDED -->
+> **[v1.4.0](https://github.com/Dyno0311/dyno-patches/releases/tag/v1.4.0)**&nbsp;&nbsp;•&nbsp;&nbsp;`main`&nbsp;&nbsp;•&nbsp;&nbsp;4 patches total
+<details open>
+<summary>📦 CamScanner&nbsp;&nbsp;•&nbsp;&nbsp;4 patches</summary>
+<br>
 
-<!-- Do not modify this section by hand. The patch list is generated when release.yml creates a new release.
-     
-     If you wish for the patches list to be collapsed, then remove the word 'EXPANDED' from the comment tag above.
+**Package name:** `com.intsig.camscanner`
 
-     If you wish to manually keep this list updated then remove the PATCHES_START and PATCHES_END 
-     comment blocks entirely. -->
+**🎯 Supported versions:**
 
-#### A list of your patches will automatically be shown here after your first patches release is created.
+| 7.27.0.2609220000 |
+| :---: |
 
-&nbsp;
+| 💊&nbsp;Patch | 📜&nbsp;Description | ⚙️&nbsp;Options |
+|----------|----------------|-----------|
+| [Hide piracy warning](#hide-piracy-warning) | Removes the "This CamScanner copy is not genuine" dialog and toast. The app's internal genuine/pirate state is left alone, so nothing re-routes features. |  |
+| [Remove PDF watermark](#remove-pdf-watermark) | Stops the Scanned with CamScanner watermark from being drawn into exported and shared PDFs. The local document is otherwise produced by the same native PDF engine, unmodified. |  |
+| [Remove ads](#remove-ads) | Blocks every CamScanner ad position at the interceptor choke point (app launch, main/share/page banners, doc list, scan-done and rewarded inventory). Ad SDKs stay bundled but receive no requests. |  |
+| [Unlock premium](#unlock-premium) | Reports a local VIP / super-VIP account status and sync entitlement, unlocking the features CamScanner gates behind its subscription check on device. Cloud credits, Word/Excel conversion and other server-side work stay validated remotely. |  |
 
-## 🚀 Adding a patch
+</details>
 
-Layout under `patches/src/main/kotlin/dev/dyno0311/patches/`:
-
-```text
-universal/            cross-app patches (ad SDKs, telemetry, selection, orientation)
-apps/<appname>/       one app, pinned to the tested version
-shared/               shared Compatibility declarations and constants
-```
-
-Rules used in this repo:
-
-- One patch per file, named for what it does. Keep the change minimal.
-- Universals must fail soft: skip when a fingerprint does not match, log what matched, and never edit a method the fingerprint cannot prove.
-- App-targeted patches pin the exact `version` (and `versionCodes` when architecture builds share a version name) that was tested.
-- Prefer `returnEarly`/`returnLate`, `resourceXml`, or one narrow instruction edit over injected smali blocks.
-- Build a stable fingerprint from non-obfuscated types, method shape, durable strings, literals, and calls. Port behaviour from community patches, not their API shape.
-
-### Development workflow
-
-- **Make all changes to the `dev` branch.**
-- Local build: `./gradlew buildAndroid` produces `patches/build/libs/patches-*.mpp`; apply it with Morphe Desktop like any other bundle.
-- Use semantic commit messages only:
-  - `feat: Added a new feature`
-  - `fix: Some problem now fixed`
-  - `chore: Random change you do not want in the user facing changelog`
-- `fix:` and `feat:` produce pre-releases from `dev`; `chore:` does not.
-- When `dev` is ready, merge it into `main` (merge, do not squash) for a stable release.
-- **Always use semantic release (release.yml).** Do not hand-create releases; do not hand-edit `patches-list.json`, `patches-bundle.json`, or `CHANGELOG.md`.
-- Enable "Allow GitHub Actions to create and approve pull requests" in Settings > Actions > General > Workflow permissions.
-- Optional signing so Morphe Manager rejects swapped releases:
-  1. `./gradlew generateSigningKey` creates `morphe-signing.pub` and `morphe-signing.key`.
-  2. Commit `morphe-signing.pub`. Never commit `morphe-signing.key`; it is git-ignored.
-  3. Add the contents of `morphe-signing.key` as the `MORPHE_SIGNING_KEY` repo secret, back it up, then delete the file.
-
-## 🤓 Tips
-- See the [patcher documentation](https://github.com/MorpheApp/morphe-patcher/blob/main/docs/1_patcher_intro.md) for more examples of creating patches and fingerprints.
-- Do not use AI to create new release scripts. The `release.yml` here already handles everything.
-  If you need something custom with your releases then modify the existing `release.yml`
-  and `.releaserc` instead of writing everything new from scratch.
-- Do not manually edit or manually commit any generated files such as: `patches-list.json`,
-  `patches-bundle.json`, `CHANGELOG.md`.  These files will be automatically updated by `release.yml`.
-- Do not force push any semantic release commits as that will break all future releases.
-  If you need to fix a broken release, it's always easiest to create a new release instead of 
-  fixing an existing release.
-
-
-<!-- The patches end tag is intentionally placed here so the first release will clean up 
-     this readme of all developer instructions above. -->
 <!-- PATCHES_END -->
 
 ### 🛠️ Building locally
